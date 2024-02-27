@@ -1,0 +1,1 @@
+export { default as GrantView } from './grant-view';

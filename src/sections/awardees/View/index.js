@@ -1,0 +1,1 @@
+export { default as AwardeeView } from './awardee-view';
