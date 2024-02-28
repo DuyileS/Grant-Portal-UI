@@ -24,17 +24,17 @@ const navConfig = [
   },
   {
     title: 'awardees',
-    path: '/',
-    icon: icon('ic_user'),
+    path: '/awardees',
+    icon: icon('ic_awardee'),
   },
   {
     title: 'applicants',
-    path: '/',
+    path: '/applicant',
     icon: icon('ic_user'),
   },
   {
     title: 'grants',
-    path: '/',
+    path: '/grant',
     icon: icon('ic_grant'),
   },
   {

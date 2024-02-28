@@ -139,11 +139,11 @@ export default function ApplicantPage() {
                       key={row.id}
                       name={row.name}
                       title={row.title}
-                      email={row.email}
-                      status={row.status}
                       department={row.department}
-                      avatarUrl={row.avatarUrl}
+                      email={row.email}
                       phoneNumber={row.phoneNumber}
+                      status={row.status}
+                      avatarUrl={row.avatarUrl}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
                     />
