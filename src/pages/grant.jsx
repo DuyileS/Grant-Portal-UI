@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { UserView } from 'src/sections/user/view';
+import { GrantView } from 'src/sections/grant/View';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function GrantPage() {
   return (
     <>
       <Helmet>
         <title> Grants | RIIC </title>
       </Helmet>
 
-      <UserView />
+      <GrantView />
     </>
   );
 }

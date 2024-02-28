@@ -16,15 +16,15 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 import TableNoData from '../table-no-data';
-import AwardeeTableRow from '../awardee-table-row';
-import AwardeeTableHead from '../awardee-table-head';
 import TableEmptyRows from '../table-empty-rows';
-import AwardeeTableToolbar from '../awardee-table-toolbar';
+import ApplicantTableRow from '../applicant-table-row';
+import ApplicantTableHead from '../applicant-table-head';
+import ApplicantTableToolbar from '../applicant-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 // ----------------------------------------------------------------------
 
-export default function AwardeePage() {
+export default function ApplicantPage() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -97,15 +97,15 @@ export default function AwardeePage() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Awardees</Typography>
+        <Typography variant="h4">Applicants</Typography>
 
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New Awardee
+          New Applicant
         </Button>
       </Stack>
 
       <Card>
-        <AwardeeTableToolbar
+        <ApplicantTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
@@ -114,7 +114,7 @@ export default function AwardeePage() {
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <AwardeeTableHead
+              <ApplicantTableHead
                 order={order}
                 orderBy={orderBy}
                 rowCount={users.length}
@@ -123,10 +123,11 @@ export default function AwardeePage() {
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
                   { id: 'name', label: 'Name' },
-                  { id: 'telephoneNumber', label: 'Telephone No.' },
-                  { id: 'emailAddress', label: 'Email' },
-                  { id: 'areaofSpecialization', label: 'Area of Specialization', align: 'center' },
-                  { id: 'amount', label: 'Amount' },
+                  { id: 'title', label: 'Title' },
+                  { id: 'department', label: 'Department' },
+                  { id: 'email', label: 'Email' },
+                  { id: 'phoneNmber', label: 'Phone.No', align: 'center' },
+                  { id: 'status', label: 'Status' },
                   { id: '' },
                 ]}
               />
@@ -134,14 +135,15 @@ export default function AwardeePage() {
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
-                    <AwardeeTableRow
+                    <ApplicantTableRow
                       key={row.id}
                       name={row.name}
-                      telephoneNumber={row.telephoneNumber}
-                      emailAddress={row.emailAddress}
-                      amount={row.amount}
+                      title={row.title}
+                      email={row.email}
+                      status={row.status}
+                      department={row.department}
                       avatarUrl={row.avatarUrl}
-                      areaOfSpecialization={row.areaOfSpecialization}
+                      phoneNumber={row.phoneNumber}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
                     />

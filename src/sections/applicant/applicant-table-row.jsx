@@ -16,14 +16,15 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function AwardeeTableRow({
+export default function ApplicantTableRow({
   selected,
   name,
   avatarUrl,
-  telephoneNumber,
-  emailAddress,
-  areaOfSpecialization,
-  amount,
+  title,
+  department,
+  email,
+  phoneNumber,
+  status,
   handleClick,
 }) {
   const [open, setOpen] = useState(null);
@@ -52,13 +53,17 @@ export default function AwardeeTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell>{telephoneNumber}</TableCell>
+        <TableCell>{title}</TableCell>
 
-        <TableCell>{emailAddress}</TableCell>
+        <TableCell>{department}</TableCell>
 
-        <TableCell align="center">{areaOfSpecialization}</TableCell>
+        <TableCell>{email}</TableCell>
 
-        <TableCell>{amount}</TableCell>
+        <TableCell align="center">{phoneNumber}</TableCell>
+
+        <TableCell>
+          <Label color={(status === 'banned' && 'error') || 'success'}>{status}</Label>
+        </TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -91,13 +96,14 @@ export default function AwardeeTableRow({
   );
 }
 
-AwardeeTableRow.propTypes = {
+ApplicantTableRow.propTypes = {
   avatarUrl: PropTypes.any,
+  department: PropTypes.any,
   handleClick: PropTypes.func,
-  areaOfSpecialization: PropTypes.any,
+  phoneNumber: PropTypes.any,
   name: PropTypes.any,
-  amount: PropTypes.any,
+  title: PropTypes.any,
+  email: PropTypes.any,
   selected: PropTypes.any,
-  telephoneNumber: PropTypes.any,
-  emailAddress: PropTypes.any,
+  status: PropTypes.string,
 };
