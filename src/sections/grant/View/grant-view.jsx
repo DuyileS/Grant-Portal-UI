@@ -126,8 +126,8 @@ export default function GrantPage() {
                   { id: 'description', label: 'Description' },
                   { id: 'deadline', label: 'Deadline' },
                   { id: 'amount', label: 'Amount' },
-                  { id: 'dateCreated', label: 'Date Created', align: 'center' },
                   { id: 'criteria', label: 'Criteria' },
+                  { id: 'dateCreated', label: 'Date Created', align: 'center' },
                   { id: '' },
                 ]}
               />
@@ -141,8 +141,8 @@ export default function GrantPage() {
                       description={row.description}
                       deadline={row.deadline}
                       amount={row.amount}
-                      dateCreated={row.dateCreated}
                       criteria={row.criteria}
+                      dateCreated={row.dateCreated}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
                     />
