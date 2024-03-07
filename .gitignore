@@ -34,3 +34,8 @@ tsconfig.tsbuildinfo
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+src/sections/applicant/applicant-approval.jsx
+src/sections/signup/signup-view.jsx
+package.json
+yarn.lock
+package-lock.json

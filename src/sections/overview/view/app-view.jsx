@@ -55,13 +55,13 @@ export default function AppView() {
 
         <Grid xs={12} md={6} lg={4}>
           <AppCurrentVisits
-            title="Current Visits"
+            title="Disciplines"
             chart={{
               series: [
-                { label: 'America', value: 4344 },
-                { label: 'Asia', value: 5435 },
-                { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 },
+                { label: 'Science', value: 4344 },
+                { label: 'Technology', value: 5435 },
+                { label: 'Health', value: 1443 },
+                { label: 'Agriculture', value: 4443 },
               ],
             }}
           />
@@ -69,7 +69,7 @@ export default function AppView() {
 
         <Grid xs={12} md={6} lg={8}>
           <AppConversionRates
-            title="Conversion Rates"
+            title="Project Completion Rates"
             subheader="(+43%) than last year"
             chart={{
               series: [

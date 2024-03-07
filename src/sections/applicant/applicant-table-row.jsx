@@ -83,7 +83,7 @@ export default function ApplicantTableRow({
         }}
       >
       <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
+          <Iconify icon="eva:eye" sx={{ mr: 2 }} />
           Approve
         </MenuItem>
 
