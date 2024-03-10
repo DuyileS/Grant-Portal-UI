@@ -13,13 +13,13 @@ export function CreateUserView() {
         <Card style={{ maxWidth: 600, margin: "0 auto" }}>
           <CardContent>
             <Typography variant="h4" color="primary" >
-              Create an Applicant
+              Create a User
           </Typography>
             <Typography variant="subtitle1" color="textSecondary" >
-              Fill all the mandatory fields to create an applicant.
+              Fill all the mandatory fields to create a user.
           </Typography>
             <form>
-              <Typography variant="body2" align="left" gutterBottom>Applicant Info : </Typography>
+              <Typography variant="body2" align="left" gutterBottom>User Info : </Typography>
               <Grid container spacing={1}>
                 {
                   inputFormElements.slice(0, 4).map(input => <Grid xs={input.xs} sm={input.sm} item>

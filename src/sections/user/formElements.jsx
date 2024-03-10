@@ -8,10 +8,6 @@ export const inputFormElements=[
         variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
     },
     {
-        name:"title",placeholder:"Enter title", label:"Title", 
-        variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
-    },
-    {
         name:"email",type:"email",placeholder:"Enter email", label:"Email", 
         variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
     },
@@ -21,10 +17,6 @@ export const inputFormElements=[
     },
     {
         name:"department", placeholder:"Enter Department", label:"Department", 
-        variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
-    },
-    {
-        name:"document", type:"file",  
         variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
     },
 ]

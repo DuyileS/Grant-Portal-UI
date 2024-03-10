@@ -1,22 +1,18 @@
 export const inputFormElements=[
     {
-        name:"firstName",placeholder:"Enter first name", label:"First Name", 
-        variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
-    },
-    {
-        name:"lastName",placeholder:"Enter last name", label:"Last Name", 
-        variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
-    },
-    {
         name:"title",placeholder:"Enter title", label:"Title", 
         variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
     },
     {
-        name:"email",type:"email",placeholder:"Enter email", label:"Email", 
+        name:"description",placeholder:"Enter Description", label:"Description", 
         variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
     },
     {
-        name:"phone", type:"number",placeholder:"Enter phone number", label:"Phone", 
+        name:"criteria",placeholder:"Enter Criteria", label:"Criteria", 
+        variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
+    },
+    {
+        name:"amount", type:"number",placeholder:"Enter Amount", label:"Amount", 
         variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
     },
     {
@@ -24,7 +20,7 @@ export const inputFormElements=[
         variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
     },
     {
-        name:"document", type:"file",  
+        name:"deadline", type:"date", label: "Deadline",  
         variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
     },
 ]

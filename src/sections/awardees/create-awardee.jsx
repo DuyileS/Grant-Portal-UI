@@ -19,7 +19,7 @@ export function CreateAwardeeView() {
               Fill all the mandatory fields to create an awardee.
           </Typography>
             <form>
-              <Typography variant="body2" align="left" gutterBottom>Applicant Info : </Typography>
+              <Typography variant="body2" align="left" gutterBottom>Awardee Info : </Typography>
               <Grid container spacing={1}>
                 {
                   inputFormElements.slice(0, 4).map(input => <Grid xs={input.xs} sm={input.sm} item>

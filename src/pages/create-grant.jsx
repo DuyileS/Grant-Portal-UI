@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { CreateGrantView } from 'src/sections/grant/grant';
+import { CreateGrantView } from 'src/sections/grant/create-grant';
 
 // ----------------------------------------------------------------------
 
