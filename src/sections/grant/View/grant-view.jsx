@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from "react-router-dom";
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -99,9 +100,11 @@ export default function GrantPage() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Grants</Typography>
 
+        <Link to="/createGrant">
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
           New Grant
         </Button>
+        </Link>
       </Stack>
 
       <Card>

@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { ProfileView } from 'src/sections/profile';
+import { CreateGrantView } from 'src/sections/grant/grant';
 
 // ----------------------------------------------------------------------
 
-export default function ProfilePage() {
+export default function CreateGrantPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | RIIC </title>
+        <title> Grants | RIIC </title>
       </Helmet>
 
-      <ProfileView />
+      <CreateGrantView />
     </>
   );
 }

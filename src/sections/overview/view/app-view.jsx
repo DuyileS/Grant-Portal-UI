@@ -55,7 +55,7 @@ export default function AppView() {
 
         <Grid xs={12} md={6} lg={4}>
           <AppCurrentVisits
-            title="Disciplines"
+            title="Areas of Discipline"
             chart={{
               series: [
                 { label: 'Science', value: 4344 },

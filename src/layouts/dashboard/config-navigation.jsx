@@ -33,9 +33,9 @@ const navConfig = [
     icon: icon('ic_grant'),
   },
   {
-    title: 'login',
-    path: '/login',
-    icon: icon('ic_lock'),
+    title: 'task',
+    path: '/task',
+    icon: icon('ic_tasks'),
   },
 ];
 
