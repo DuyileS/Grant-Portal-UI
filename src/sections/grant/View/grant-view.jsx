@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -16,12 +16,15 @@ import { users } from 'src/_mock/user';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import TableNoData from '../table-no-data';
 import GrantTableRow from '../grant-table-row';
 import GrantTableHead from '../grant-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import GrantTableToolbar from '../grant-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
+import { fDateTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +41,8 @@ export default function GrantPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [apidata, setApiData] = useState([]);
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -45,6 +50,21 @@ export default function GrantPage() {
       setOrderBy(id);
     }
   };
+
+  useEffect(() => {
+    axios
+      .get('https://localhost:7197/api/Grants')
+      .then((response) => {
+        console.log(response.data);
+        setApiData(response.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          toast.error(err.response.data, { autoClose: 1000 });
+        }
+        console.log(err);
+      });
+  }, []);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -101,9 +121,9 @@ export default function GrantPage() {
         <Typography variant="h4">Grants</Typography>
 
         <Link to="/createGrant">
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New Grant
-        </Button>
+          <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+            New Grant
+          </Button>
         </Link>
       </Stack>
 
@@ -120,40 +140,38 @@ export default function GrantPage() {
               <GrantTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
+                rowCount={apidata.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
                   { id: 'title', label: 'Title' },
                   { id: 'description', label: 'Description' },
-                  { id: 'deadline', label: 'Deadline' },
                   { id: 'amount', label: 'Amount' },
                   { id: 'criteria', label: 'Criteria' },
+                  { id: 'deadline', label: 'Deadline' },
                   { id: 'dateCreated', label: 'Date Created', align: 'center' },
                   { id: '' },
                 ]}
               />
               <TableBody>
-                {dataFiltered
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <GrantTableRow
-                      key={row.id}
-                      title={row.title}
-                      description={row.description}
-                      deadline={row.deadline}
-                      amount={row.amount}
-                      criteria={row.criteria}
-                      dateCreated={row.dateCreated}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
-                    />
-                  ))}
+                {apidata.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                  <GrantTableRow
+                    key={row.id}
+                    title={row.title}
+                    description={row.description}
+                    amount={row.amount}
+                    criteria={row.criteria}
+                    deadline={fDateTime(row.deadline)}
+                    dateCreated={fDateTime(row.dateCreated)}
+                    selected={selected.indexOf(row.name) !== -1}
+                    handleClick={(event) => handleClick(event, row.name)}
+                  />
+                ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, apidata.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -165,7 +183,7 @@ export default function GrantPage() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={apidata.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

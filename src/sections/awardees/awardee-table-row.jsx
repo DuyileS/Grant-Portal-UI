@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
@@ -77,8 +78,15 @@ export default function AwardeeTableRow({
         }}
       >
         <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          Edit
+          <Iconify icon="eva:eye" sx={{ mr: 2 }} />
+          View Document
+        </MenuItem>
+
+        <MenuItem onClick={handleCloseMenu}>
+          <Link to="editAwardee">
+            <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
+            Edit
+          </Link>
         </MenuItem>
 
         <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>

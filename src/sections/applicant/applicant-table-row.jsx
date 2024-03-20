@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
@@ -19,7 +20,6 @@ import Iconify from 'src/components/iconify';
 export default function ApplicantTableRow({
   selected,
   name,
-  avatarUrl,
   title,
   department,
   email,
@@ -46,7 +46,6 @@ export default function ApplicantTableRow({
 
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
             <Typography variant="subtitle2" noWrap>
               {name}
             </Typography>
@@ -82,14 +81,26 @@ export default function ApplicantTableRow({
           sx: { width: 140 },
         }}
       >
-      <MenuItem onClick={handleCloseMenu}>
+        <MenuItem onClick={handleCloseMenu}>
           <Iconify icon="eva:eye" sx={{ mr: 2 }} />
           Approve
         </MenuItem>
 
         <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          Edit
+          <Iconify icon="eva:eye" sx={{ mr: 2 }} />
+          Reject
+        </MenuItem>
+
+        <MenuItem onClick={handleCloseMenu}>
+          <Iconify icon="eva:eye" sx={{ mr: 2 }} />
+          View Document
+        </MenuItem>
+
+        <MenuItem onClick={handleCloseMenu}>
+          <Link to="editApplicant">
+            <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
+            Edit
+          </Link>
         </MenuItem>
 
         <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
@@ -102,7 +113,6 @@ export default function ApplicantTableRow({
 }
 
 ApplicantTableRow.propTypes = {
-  avatarUrl: PropTypes.any,
   department: PropTypes.any,
   handleClick: PropTypes.func,
   phoneNumber: PropTypes.any,

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
+import axios from 'axios';
 import Stack from '@mui/material/Stack';
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
@@ -14,6 +16,28 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
+
+const updateData = (formData) => {
+  console.log('submtting');
+  axios
+    .put('https://localhost:7197/api/grants', formData)
+    .then((response) => {
+      toast.success('Updated Successfully');
+      console.log('submitted successfully');
+    })
+    .catch((err) => toast.error(err.response.data));
+};
+
+const deleteData = (formData) => {
+  console.log('submtting');
+  axios
+    .delete('https://localhost:7197/api/grants', formData)
+    .then((response) => {
+      toast.success('Deleted Successfully');
+      console.log('submitted successfully');
+    })
+    .catch((err) => toast.error(err.response.data));
+};
 
 export default function GrantTableRow({
   selected,
@@ -79,8 +103,10 @@ export default function GrantTableRow({
         }}
       >
         <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          Edit
+          <Link to="/editGrant">
+            <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
+            Edit
+          </Link>
         </MenuItem>
 
         <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>

@@ -17,6 +17,9 @@ export const CreateApplicantPage = lazy(() => import('src/pages/create-applicant
 export const CreateAwardeePage = lazy(() => import('src/pages/create-awardee'));
 export const CreateGrantPage = lazy(() => import('src/pages/create-grant'));
 export const CreateUserPage = lazy(() => import('src/pages/create-user'));
+export const EditApplicantPage = lazy(() => import('src/pages/edit-applicant'));
+export const EditAwardeePage = lazy(() => import('src/pages/edit-awardee'));
+export const EditGrantPage = lazy(() => import('src/pages/edit-grant'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
@@ -68,6 +71,18 @@ export default function Router() {
     {
       path: 'createUser',
       element: <CreateUserPage />,
+    },
+    {
+      path: 'editApplicant',
+      element: <EditApplicantPage />,
+    },
+    {
+      path: 'editAwardee',
+      element: <EditAwardeePage />,
+    },
+    {
+      path: 'editGrant',
+      element: <EditGrantPage />,
     },
     {
       path: '404',

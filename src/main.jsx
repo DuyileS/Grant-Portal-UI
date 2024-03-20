@@ -5,6 +5,9 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import 'src/sections/signup/signup.css';
 
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 import App from './app';
 
 // ----------------------------------------------------------------------
@@ -16,6 +19,7 @@ root.render(
     <BrowserRouter>
       <Suspense>
         <App />
+        <ToastContainer autoClose={1000} />
       </Suspense>
     </BrowserRouter>
   </HelmetProvider>

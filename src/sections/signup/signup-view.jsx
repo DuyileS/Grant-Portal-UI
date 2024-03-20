@@ -1,158 +1,152 @@
-import axios from "axios";
-import { React, useState } from "react";
-import { enqueueSnackbar } from "notistack";
-import { Link, useNavigate } from "react-router-dom";
+/* eslint-disable*/
+import axios from 'axios';
+import { React, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-import  Grid from '@mui/material/Grid';
-import  Paper from '@mui/material/Paper';
-import  Button from '@mui/material/Button';
+import 'react-toastify/dist/ReactToastify.css';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import LoadingButton from '@mui/lab/LoadingButton';
 // import  Avatar  from '@mui/material/Avatar';
-import  TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Iconify from 'src/components/iconify';
 // import AddCircleOutlineOutlinedIcon from '@mui/material/icons/AddCircleOutlineOutlined';
 
 // ----------------------------------------------------------------------
 /* eslint-disable*/
 
 export default function SignupView() {
-
   //const Signup = () => {
-    const paperStyle = { padding: 20, width: 300, margin: "0 auto" }
-    const headerStyle = { margin: 0 }
-    const avatarStyle = { backgroundColor: '#1bbd7e' }
-    const marginTop = { marginTop: 10 }
-    const navigate = useNavigate();
-  
+  const paperStyle = { padding: 20, width: 300, margin: '0 auto' };
+  const headerStyle = { margin: 0 };
+  const avatarStyle = { backgroundColor: '#1bbd7e' };
+  const marginTop = { marginTop: 10 };
+  const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-      email: "",
-      password: "",
-    });
-  
-    const handleChange = (event) => {
-      setFormData({ ...formData, [event.target.name]: event.target.value });
-    };
-  
-    const handleSubmit = async () => {
-      try {
-        const res = await axios.post(
-          "https://aporvis-server.vercel.app/api/user/register",
-          formData
-        );
-        if (res.data.error) {
-          enqueueSnackbar(res.data.error, { variant: "error" });
-        } else {
-          enqueueSnackbar("Signup successful", { variant: "success" });
-          navigate("/login");
-        }
-      } catch (error) {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
-          enqueueSnackbar(error.response.data.message, { variant: "error" });
-        } else {
-          enqueueSnackbar("An error occurred while logging in.", {
-            variant: "error",
-          });
-        }
-      }
-    };
-  
-    return (
-     
-      <Grid>
-            <Paper style={paperStyle}>
-                <Grid align='center'>
-                    <h2 style={marginTop}>Sign Up</h2>
-                    <Typography variant='caption' gutterBottom>Please fill this form to create an account !</Typography>
-                </Grid>
-                <form>
-                    <TextField fullWidth label='Name' placeholder="Enter your name" />
-                    <TextField fullWidth label='Email' placeholder="Enter your email" type="email" style={marginTop}/>
-                    <TextField fullWidth label='Phone Number' placeholder="Enter your phone number" type="tel" style={marginTop} />
-                    <TextField fullWidth label='Password' placeholder="Enter your password" type="password" style={marginTop}/>
-                    <TextField fullWidth label='Confirm Password' placeholder="Confirm your password" type="password" style={marginTop}/>
-                    <Link to="/login">
-                    <Button type='submit' variant='contained' color='primary' style={marginTop}>Sign up</Button>
-                    </Link>
-                </form>
-            </Paper>
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [formData, setFormData] = useState({
+    Firstname: '',
+    Lastname: '',
+    Username: '',
+    Password: '',
+    Roles: [''],
+  });
+
+  const submitForm = () => {
+    setLoading(true);
+    axios
+      .post('https://localhost:7197/api/Auth/Register', formData)
+      .then((response) => {
+        console.log(response.data);
+        setLoading(false);
+        toast.success('Registration Successful', { autoClose: 1000 });
+        navigate('/login');
+      })
+      .catch((err) => {
+        toast.error(err.response.data, { autoClose: 1000 });
+        setLoading(false);
+      });
+  };
+
+  return (
+    <Grid>
+      <Paper style={paperStyle}>
+        <Grid align="center">
+          <h2 style={marginTop}>Sign Up</h2>
+          <Typography variant="caption" gutterBottom>
+            Please fill this form to create an account !
+          </Typography>
         </Grid>
-  
-);
-};
-
-/*
-import React from 'react'
-import { Grid, Paper, Avatar, Typography, TextField, Button } from '@material-ui/core'
-import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-const Signup = () => {
-    const paperStyle = { padding: 20, width: 300, margin: "0 auto" }
-    const headerStyle = { margin: 0 }
-    const avatarStyle = { backgroundColor: '#1bbd7e' }
-    const marginTop = { marginTop: 5 }
-    return (
-        
-    )
+        <form>
+          <TextField
+            fullWidth
+            label="Firstname"
+            placeholder="Enter your Firstname"
+            style={marginTop}
+            value={formData.Firstname}
+            onChange={(e) => {
+              setFormData({ ...formData, Firstname: e.target.value });
+            }}
+          />
+          <TextField
+            fullWidth
+            label="Lastname"
+            placeholder="Enter your Lastname"
+            style={marginTop}
+            value={formData.Lastname}
+            onChange={(e) => {
+              setFormData({ ...formData, Lastname: e.target.value });
+            }}
+          />
+          <TextField
+            fullWidth
+            label="Username"
+            placeholder="Enter your email address as Username"
+            type="email"
+            style={marginTop}
+            value={formData.Username}
+            onChange={(e) => {
+              setFormData({ ...formData, Username: e.target.value });
+            }}
+          />
+          <TextField
+            fullWidth
+            label="Phone Number"
+            placeholder="Enter your phone number"
+            type="tel"
+            style={marginTop}
+          />
+          <TextField
+            name="password"
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            style={marginTop}
+            value={formData.Password}
+            onChange={(e) => {
+              setFormData({ ...formData, Password: e.target.value });
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            fullWidth
+            label="Role"
+            placeholder="Enter user role"
+            style={marginTop}
+            value={formData.Roles}
+            onChange={(e) => {
+              setFormData({ ...formData, Roles: [e.target.value] });
+            }}
+          />
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            color="inherit"
+            fullWidth
+            loading={loading}
+            style={marginTop}
+            onClick={(e) => {
+              e.preventDefault();
+              submitForm();
+            }}
+          >
+            Sign up
+          </LoadingButton>
+        </form>
+      </Paper>
+    </Grid>
+  );
 }
-
-export default Signup;
-
-import React from 'react'
-import { Grid, Paper, Avatar, Typography, TextField, Button } from '@material-ui/core'
-import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-const Signup = () => {
-    const paperStyle = { padding: 20, width: 300, margin: "0 auto" }
-    const headerStyle = { margin: 0 }
-    const avatarStyle = { backgroundColor: '#1bbd7e' }
-    const marginTop = { marginTop: 5 }
-    return (
-        <Grid>
-            <Paper style={paperStyle}>
-                <Grid align='center'>
-                    <Avatar style={avatarStyle}>
-                        <AddCircleOutlineOutlinedIcon />
-                    </Avatar>
-                    <h2 style={headerStyle}>Sign Up</h2>
-                    <Typography variant='caption' gutterBottom>Please fill this form to create an account !</Typography>
-                </Grid>
-                <form>
-                    <TextField fullWidth label='Name' placeholder="Enter your name" />
-                    <TextField fullWidth label='Email' placeholder="Enter your email" />
-                    <FormControl component="fieldset" style={marginTop}>
-                        <FormLabel component="legend">Gender</FormLabel>
-                        <RadioGroup aria-label="gender" name="gender" style={{ display: 'initial' }}>
-                            <FormControlLabel value="female" control={<Radio />} label="Female" />
-                            <FormControlLabel value="male" control={<Radio />} label="Male" />
-                        </RadioGroup>
-                    </FormControl>
-                    <TextField fullWidth label='Phone Number' placeholder="Enter your phone number" />
-                    <TextField fullWidth label='Password' placeholder="Enter your password"/>
-                    <TextField fullWidth label='Confirm Password' placeholder="Confirm your password"/>
-                    <FormControlLabel
-                        control={<Checkbox name="checkedA" />}
-                        label="I accept the terms and conditions."
-                    />
-                    <Button type='submit' variant='contained' color='primary'>Sign up</Button>
-                </form>
-            </Paper>
-        </Grid>
-    )
-}
-*/
-
-
-

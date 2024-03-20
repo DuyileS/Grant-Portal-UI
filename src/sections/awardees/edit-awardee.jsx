@@ -7,32 +7,42 @@ import { inputFormElements } from './formElements';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 
-export function CreateUserView() {
+export function EditAwardeeView() {
+  const margin = { margin: '0 5px' };
   const navigate = useNavigate();
 
-  const submitData = (formData) => {
+  const submitDocument = (formData) => {
     console.log('submtting');
     axios
-      .post('https://localhost:7197/api/Auth/Register', formData)
+      .post('https://localhost:7197/api/documents', formData)
       .then((response) => {
-        toast.success('User Created Successfully');
-        navigate('/user');
         console.log('submitted successfully');
       })
       .catch((err) => toast.error(err.response.data));
   };
 
-  const margin = { margin: '0 5px' };
+  const submitData = (formData) => {
+    console.log('submtting');
+    axios
+      .post('https://localhost:7197/api/applicants', formData)
+      .then((response) => {
+        toast.success('Awardee Edited Successfully');
+        navigate('/applicant');
+        console.log('submitted successfully');
+      })
+      .catch((err) => toast.error(err.response.data));
+  };
+
   return (
     <div className="App">
       <Grid style={{ padding: '80px 5px 0 5px' }}>
         <Card style={{ maxWidth: 600, margin: '0 auto' }}>
           <CardContent>
             <Typography variant="h4" color="inherit">
-              Create a User
+              Edit an Awardee
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              Fill all the mandatory fields to create a user.
+              Fill all the mandatory fields to edit an awardee.
             </Typography>
             <form
               onSubmit={(e) => {
@@ -47,7 +57,7 @@ export function CreateUserView() {
               }}
             >
               <Typography variant="body2" align="left" gutterBottom>
-                User Info :{' '}
+                Awardee Info :{' '}
               </Typography>
               <Grid container spacing={1}>
                 {inputFormElements.slice(0, 4).map((input) => (

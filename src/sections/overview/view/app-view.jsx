@@ -1,6 +1,6 @@
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography'; 
+import Typography from '@mui/material/Typography';
 
 import AppTasks from '../app-tasks';
 import AppCurrentVisits from '../app-current-visits';
@@ -28,10 +28,10 @@ export default function AppView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
-            title="Total Users"
+            title="Total Amount for Grants"
             total={1352831}
             color="info"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_check.png" />}
           />
         </Grid>
 
@@ -92,8 +92,8 @@ export default function AppView() {
           <AppTasks
             title="Tasks"
             list={[
-              { id: '1', name: 'Create FireStone Logo' },
-              { id: '2', name: 'Add SCSS and JS files if required' },
+              { id: '1', name: 'Populate Grant Portal Database' },
+              { id: '2', name: 'Approve pending grant applications' },
               { id: '3', name: 'Stakeholder Meeting' },
               { id: '4', name: 'Scoping & Estimations' },
               { id: '5', name: 'Sprint Showcase' },

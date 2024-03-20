@@ -116,19 +116,9 @@ function TaskItem({ task, checked, onChange }) {
         anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem onClick={handleMarkComplete}>
-          <Iconify icon="eva:checkmark-circle-2-fill" sx={{ mr: 2 }} />
-          Mark Complete
-        </MenuItem>
-
         <MenuItem onClick={handleEdit}>
           <Iconify icon="solar:pen-bold" sx={{ mr: 2 }} />
           Edit
-        </MenuItem>
-
-        <MenuItem onClick={handleShare}>
-          <Iconify icon="solar:share-bold" sx={{ mr: 2 }} />
-          Share
         </MenuItem>
 
         <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>

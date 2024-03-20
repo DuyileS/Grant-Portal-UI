@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -11,17 +11,18 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { users } from 'src/_mock/user';
-
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import TableNoData from '../table-no-data';
 import TableEmptyRows from '../table-empty-rows';
 import ApplicantTableRow from '../applicant-table-row';
 import ApplicantTableHead from '../applicant-table-head';
 import ApplicantTableToolbar from '../applicant-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
+import { object } from 'prop-types';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +39,9 @@ export default function ApplicantPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [apidata, setApiData] = useState([]);
+  console.log(apidata);
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -46,9 +50,21 @@ export default function ApplicantPage() {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get('https://localhost:7197/api/Applicants')
+      .then((response) => {
+        setApiData(response.data);
+      })
+      .catch((err) => {
+        toast.error(err.response.data, { autoClose: 1000 });
+        console.log(err.response.data);
+      });
+  }, []);
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = apidata.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -88,7 +104,7 @@ export default function ApplicantPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: users,
+    inputData: apidata,
     comparator: getComparator(order, orderBy),
     filterName,
   });
@@ -100,11 +116,11 @@ export default function ApplicantPage() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Applicants</Typography>
 
-      <Link to="/createApplicant">
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New Applicant
-        </Button>
-      </Link>  
+        <Link to="/createApplicant">
+          <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+            New Applicant
+          </Button>
+        </Link>
       </Stack>
 
       <Card>
@@ -120,7 +136,7 @@ export default function ApplicantPage() {
               <ApplicantTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
+                rowCount={apidata.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
@@ -140,13 +156,12 @@ export default function ApplicantPage() {
                   .map((row) => (
                     <ApplicantTableRow
                       key={row.id}
-                      name={row.name}
+                      name={row.firstName + ' ' + row.lastName}
                       title={row.title}
                       department={row.department}
                       email={row.email}
                       phoneNumber={row.phoneNumber}
                       status={row.status}
-                      avatarUrl={row.avatarUrl}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
                     />
@@ -154,7 +169,7 @@ export default function ApplicantPage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, apidata.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -166,7 +181,7 @@ export default function ApplicantPage() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={apidata.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

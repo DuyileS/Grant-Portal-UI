@@ -1,271 +1,90 @@
-/* import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
-import { ModalStore } from "../Context/States";
-import { Button, Chip, Skeleton, TextField } from "@mui/material";
-import { formatNormalDate } from "../Utils/helpers";
-import { Link } from "react-router-dom";
+import React from 'react';
+import './applicant.css';
+import { Grid, TextField, Button, Card, CardContent, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 600,
-  height: "fit-content",
-  maxHeight: 430,
-  bgcolor: "background.paper",
-  border: "2px solid green",
-  boxShadow: 24,
-  p: 4,
-};
+import { inputFormElements } from './formElements';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 
-export default function PatientModal() {
-  const open = ModalStore(store => store.open);
-  const modalDetails = ModalStore(store => store.modalDetails);
-  const hideModal = ModalStore(store => store.hideModal);
+export function EditApplicantView() {
+  const margin = { margin: '0 5px' };
+  const navigate = useNavigate();
+
+  const submitDocument = (formData) => {
+    console.log('submtting');
+    axios
+      .post('https://localhost:7197/api/documents', formData)
+      .then((response) => {
+        console.log('submitted successfully');
+      })
+      .catch((err) => toast.error(err.response.data));
+  };
+
+  const submitData = (formData) => {
+    console.log('submtting');
+    axios
+      .post('https://localhost:7197/api/applicants', formData)
+      .then((response) => {
+        toast.success('Applicant Edited Successfully');
+        navigate('/applicant');
+        console.log('submitted successfully');
+      })
+      .catch((err) => toast.error(err.response.data));
+  };
 
   return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={open}
-      onClose={hideModal}
-      closeAfterTransition
-      slots={{ backdrop: Backdrop }}
-      slotProps={{
-        backdrop: {
-          timeout: 500,
-        },
-      }}
-    >
-      <Fade in={open}>
-        <Box sx={style} className="rounded-2xl flex flex-col gap-4">
-          <h2 className="text-xl font-medium">Patient Details</h2>
-          <div className="modal-box flex flex-col gap-4 h-full relative overflow-y-auto">
-            {!modalDetails && (
-              <>
-                <Skeleton width={"100%"} height={"50px"} />
-                <Skeleton width={"100%"} height={"50px"} />
-                <Skeleton width={"100%"} height={"50px"} />
-              </>
-            )}
-            {modalDetails && (
-              <TextField
-                label="Hospital Number"
-                value={modalDetails?.hospitalNumber || "  "}
-                InputProps={{
-                  readOnly: true,
-                }}
-                fullWidth
-                variant="filled"
-                color="success"
-              />
-            )}
-            <div className="flex gap-3">
-              {!modalDetails && (
-                <>
-                  <Skeleton width={"100%"} height={"50px"} />
-                  <Skeleton width={"100%"} height={"50px"} />
-                  <Skeleton width={"100%"} height={"50px"} />
-                </>
-              )}
-              {modalDetails && (
-                <>
-                  <TextField
-                    label="First Name"
-                    value={modalDetails?.firstName || "  "}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    fullWidth
-                    variant="filled"
-                    color="success"
-                    placeholder=""
-                  />
-
-                  <TextField
-                    label="Last Name"
-                    value={modalDetails?.lastName || "  "}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    fullWidth
-                    variant="filled"
-                    color="success"
-                  />
-                </>
-              )}
-            </div>
-
-            <div className="flex gap-3">
-              {!modalDetails && (
-                <>
-                  <Skeleton width={"100%"} height={"50px"} />
-                  <Skeleton width={"100%"} height={"50px"} />
-                  <Skeleton width={"100%"} height={"50px"} />
-                </>
-              )}
-              {modalDetails && (
-                <>
-                  <TextField
-                    label="Gender"
-                    value={modalDetails?.gender || "  "}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    fullWidth
-                    variant="filled"
-                    color="success"
-                  />
-                  <TextField
-                    label="Date of Birth"
-                    value={
-                      formatNormalDate(modalDetails?.dateOfBirth) || "  "
-                    }
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    fullWidth
-                    variant="filled"
-                    color="success"
-                  />
-                </>
-              )}
-            </div>
-            <div className="flex gap-3">
-              {!modalDetails && (
-                <>
-                  <Skeleton width={"100%"} height={"50px"} />
-                  <Skeleton width={"100%"} height={"50px"} />
-                  <Skeleton width={"100%"} height={"50px"} />
-                </>
-              )}
-              {modalDetails && (
-                <>
-                  <TextField
-                    label="Blood Group"
-                    value={modalDetails.bloodgroup}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    fullWidth
-                    variant="filled"
-                    color="success"
-                  />
-                  <TextField
-                    label="Genotype"
-                    value={modalDetails.genotype}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    fullWidth
-                    variant="filled"
-                    color="success"
-                  />
-                  <Chip
-                    label={modalDetails.status.toLocaleUpperCase()}
-                    className={`!h-12 ${
-                      modalDetails.status === "good"
-                        ? "!bg-[rgb(94,218,94,0.5)]"
-                        : modalDetails.status === "abnormal"
-                        ? "!bg-[rgb(227,189,51,0.5)]"
-                        : "!bg-[rgb(218,94,94,0.5)]"
-                    } font-bold !rounded-3xl min-w-fit !w-[300px]`}
-                  />
-                </>
-              )}
-            </div>
-            <div className="flex gap-3">
-              {!modalDetails && (
-                <>
-                  <Skeleton width={"100%"} height={"50px"} />
-                  <Skeleton width={"100%"} height={"50px"} />
-                  <Skeleton width={"100%"} height={"50px"} />
-                </>
-              )}
-              {modalDetails && (
-                <>
-                  <TextField
-                    label="Phone Number"
-                    value={modalDetails.phone_number}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    fullWidth
-                    variant="filled"
-                    color="success"
-                  />
-                  <TextField
-                    label="Emergency Contact 1"
-                    value={modalDetails.emergencyContact1}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    fullWidth
-                    variant="filled"
-                    color="success"
-                  />
-                  <TextField
-                    label="Emergency Contact 2"
-                    value={modalDetails.emergencyContact2}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    fullWidth
-                    variant="filled"
-                    color="success"
-                  />
-                </>
-              )}
-            </div>
-          </div>
-          <hr className="border-1 border-[#BFEA7C]" />
-          <div className="flex items-center justify-between">
-            <Link
-              to={{
-                pathname: `vitals`,
-                search: `hospitalNumber=${
-                  modalDetails
-                    ? encodeURIComponent(modalDetails!.hospitalNumber)
-                    : ""
-                }`,
+    <div className="App">
+      <Grid style={{ padding: '80px 5px 0 5px' }}>
+        <Card style={{ maxWidth: 600, margin: '0 auto' }}>
+          <CardContent>
+            <Typography variant="h4" color="inherit">
+              Edit an Applicant
+            </Typography>
+            <Typography variant="subtitle1" color="textSecondary">
+              Fill all the mandatory fields to edit an applicant.
+            </Typography>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const mainFormData = {};
+                for (let pair of formData.entries()) {
+                  mainFormData[pair[0]] = pair[1];
+                }
+                console.log(mainFormData);
+                submitData(mainFormData);
               }}
-              onClick={hideModal}
             >
-              <Button color="primary" variant="contained" size="large">
-                View Vitals
-              </Button>
-            </Link>
-            <Link
-              to={{
-                pathname: `medication`,
-                search: `hospitalNumber=${
-                  modalDetails
-                    ? encodeURIComponent(modalDetails!.hospitalNumber)
-                    : ""
-                }`,
-              }}
-              onClick={hideModal}
-            >
-              <Button color="warning" variant="contained" size="large">
-                View Medication
-              </Button>
-            </Link>
-
-            <Button
-              color="error"
-              variant="outlined"
-              size="large"
-              onClick={hideModal}
-            >
-              Close
-            </Button>
-          </div>
-        </Box>
-      </Fade>
-    </Modal>
+              <Typography variant="body2" align="left" gutterBottom>
+                Applicant Info :{' '}
+              </Typography>
+              <Grid container spacing={1}>
+                {inputFormElements.slice(0, 4).map((input) => (
+                  <Grid xs={input.xs} sm={input.sm} item>
+                    <TextField {...input} />
+                  </Grid>
+                ))}
+              </Grid>
+              <Grid container spacing={1}>
+                {inputFormElements.slice(4, 9).map((input) => (
+                  <Grid xs={input.xs} sm={input.sm} item>
+                    <TextField {...input} />
+                  </Grid>
+                ))}
+              </Grid>
+              <Grid container spacing={1}>
+                <Grid item xs={12} align="right">
+                  <Button type="submit" variant="contained" color="inherit">
+                    Submit
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </CardContent>
+        </Card>
+      </Grid>
+      <ToastContainer autoClose={1000} />
+    </div>
   );
 }
-*/

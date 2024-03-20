@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -10,8 +12,6 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-
-import { users } from 'src/_mock/user';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -38,6 +38,8 @@ export default function AwardeePage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [apidata, setApiData] = useState([]);
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -46,9 +48,22 @@ export default function AwardeePage() {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get('https://localhost:7197/api/Awardees')
+      .then((response) => {
+        console.log(response.data);
+        setApiData(response.data);
+      })
+      .catch((err) => {
+        toast.error(err.response.data, { autoClose: 1000 });
+        console.log(err.response.data);
+      });
+  }, []);
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = apidata.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -88,7 +103,7 @@ export default function AwardeePage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: users,
+    inputData: apidata,
     comparator: getComparator(order, orderBy),
     filterName,
   });
@@ -101,9 +116,9 @@ export default function AwardeePage() {
         <Typography variant="h4">Awardees</Typography>
 
         <Link to="/createAwardee">
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New Awardee
-        </Button>
+          <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+            New Awardee
+          </Button>
         </Link>
       </Stack>
 
@@ -120,7 +135,7 @@ export default function AwardeePage() {
               <AwardeeTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
+                rowCount={apidata.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
@@ -139,11 +154,10 @@ export default function AwardeePage() {
                   .map((row) => (
                     <AwardeeTableRow
                       key={row.id}
-                      name={row.name}
-                      telephoneNumber={row.telephoneNumber}
-                      emailAddress={row.emailAddress}
+                      name={row.firstName + ' ' + row.lastName}
+                      telephoneNumber={row.phoneNumber}
+                      emailAddress={row.email}
                       amount={row.amount}
-                      avatarUrl={row.avatarUrl}
                       areaOfSpecialization={row.areaOfSpecialization}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
@@ -152,7 +166,7 @@ export default function AwardeePage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, apidata.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -164,7 +178,7 @@ export default function AwardeePage() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={apidata.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}
