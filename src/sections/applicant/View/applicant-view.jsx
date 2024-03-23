@@ -15,14 +15,14 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import TableNoData from '../table-no-data';
 import TableEmptyRows from '../table-empty-rows';
 import ApplicantTableRow from '../applicant-table-row';
 import ApplicantTableHead from '../applicant-table-head';
 import ApplicantTableToolbar from '../applicant-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
-import { object } from 'prop-types';
+import 'react-toastify/dist/ReactToastify.css';
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +50,22 @@ export default function ApplicantPage() {
     }
   };
 
-  useEffect(() => {
+  function getApplicants() {
+    axios
+      .get('https://localhost:7197/api/Applicants')
+      .then((response) => {
+        console.log(response.data);
+        setApiData(response.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          toast.error(err.response.data, { autoClose: 1000 });
+        }
+        console.log(err);
+      });
+  }
+
+  /* useEffect(() => {
     axios
       .get('https://localhost:7197/api/Applicants')
       .then((response) => {
@@ -60,6 +75,10 @@ export default function ApplicantPage() {
         toast.error(err.response.data, { autoClose: 1000 });
         console.log(err.response.data);
       });
+  }, []);*/
+
+  useEffect(() => {
+    getApplicants();
   }, []);
 
   const handleSelectAllClick = (event) => {
@@ -126,7 +145,7 @@ export default function ApplicantPage() {
       <Card>
         <ApplicantTableToolbar
           numSelected={selected.length}
-          filterName={filterName}
+          filterName={apidata.firstName}
           onFilterName={handleFilterByName}
         />
 
@@ -156,7 +175,10 @@ export default function ApplicantPage() {
                   .map((row) => (
                     <ApplicantTableRow
                       key={row.id}
-                      name={row.firstName + ' ' + row.lastName}
+                      id={row.applicantId}
+                      documentId={row.documentId}
+                      name={row.lastName + ' ' + row.firstName}
+                      getApplicants={getApplicants}
                       title={row.title}
                       department={row.department}
                       email={row.email}
@@ -188,6 +210,7 @@ export default function ApplicantPage() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
+      <ToastContainer autoClose={1000} />
     </Container>
   );
 }

@@ -14,7 +14,6 @@ import * as Yup from 'yup';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
-// import { Form, Field, Formik, ErrorMessage } from 'formik'
 
 import { useRouter } from 'src/routes/hooks';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,19 +31,7 @@ export default function LoginView() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ Email: '', Password: '' });
-  /* const handleClick = () => {
-    router.push('/dashboard');
-  }; */
 
-  const initialValues = {
-    email: '',
-    password: '',
-    remember: false,
-  };
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email('please enter valid email').required('Required'),
-    password: Yup.string().required('Required'),
-  });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -69,9 +56,9 @@ export default function LoginView() {
     <>
       <Stack spacing={3}>
         <TextField
-          validationSchema={validationSchema}
           value={formData.Email}
           name="email"
+          required
           label="Email address"
           onChange={(e) => {
             setFormData({ ...formData, Email: e.target.value });
@@ -82,11 +69,11 @@ export default function LoginView() {
           name="password"
           label="Password"
           type={showPassword ? 'text' : 'password'}
+          required
           value={formData.Password}
           onChange={(e) => {
             setFormData({ ...formData, Password: e.target.value });
           }}
-          validationSchema={validationSchema}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

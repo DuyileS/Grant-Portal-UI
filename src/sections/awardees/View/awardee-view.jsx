@@ -22,7 +22,7 @@ import AwardeeTableRow from '../awardee-table-row';
 import AwardeeTableHead from '../awardee-table-head';
 import AwardeeTableToolbar from '../awardee-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
-
+import 'react-toastify/dist/ReactToastify.css';
 // ----------------------------------------------------------------------
 
 export default function AwardeePage() {
@@ -48,7 +48,22 @@ export default function AwardeePage() {
     }
   };
 
-  useEffect(() => {
+  function getAwardees() {
+    axios
+      .get('https://localhost:7197/api/Awardees')
+      .then((response) => {
+        console.log(response.data);
+        setApiData(response.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          toast.error(err.response.data, { autoClose: 1000 });
+        }
+        console.log(err);
+      });
+  }
+
+  /*useEffect(() => {
     axios
       .get('https://localhost:7197/api/Awardees')
       .then((response) => {
@@ -59,6 +74,10 @@ export default function AwardeePage() {
         toast.error(err.response.data, { autoClose: 1000 });
         console.log(err.response.data);
       });
+  }, []); */
+
+  useEffect(() => {
+    getAwardees();
   }, []);
 
   const handleSelectAllClick = (event) => {
@@ -154,7 +173,10 @@ export default function AwardeePage() {
                   .map((row) => (
                     <AwardeeTableRow
                       key={row.id}
-                      name={row.firstName + ' ' + row.lastName}
+                      id={row.awardeeId}
+                      documentId={row.documentId}
+                      name={row.lastName + ' ' + row.firstName}
+                      getAwardees={getAwardees}
                       telephoneNumber={row.phoneNumber}
                       emailAddress={row.email}
                       amount={row.amount}

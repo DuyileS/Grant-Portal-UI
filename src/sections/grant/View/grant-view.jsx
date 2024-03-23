@@ -17,13 +17,14 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import TableNoData from '../table-no-data';
 import GrantTableRow from '../grant-table-row';
 import GrantTableHead from '../grant-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import GrantTableToolbar from '../grant-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
+import 'react-toastify/dist/ReactToastify.css';
 import { fDateTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
@@ -51,7 +52,7 @@ export default function GrantPage() {
     }
   };
 
-  useEffect(() => {
+  function getGrants() {
     axios
       .get('https://localhost:7197/api/Grants')
       .then((response) => {
@@ -64,6 +65,10 @@ export default function GrantPage() {
         }
         console.log(err);
       });
+  }
+
+  useEffect(() => {
+    getGrants();
   }, []);
 
   const handleSelectAllClick = (event) => {
@@ -130,7 +135,7 @@ export default function GrantPage() {
       <Card>
         <GrantTableToolbar
           numSelected={selected.length}
-          filterName={filterName}
+          filterName={apidata.title}
           onFilterName={handleFilterByName}
         />
 
@@ -158,6 +163,7 @@ export default function GrantPage() {
                 {apidata.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <GrantTableRow
                     key={row.id}
+                    id={row.grantId}
                     title={row.title}
                     description={row.description}
                     amount={row.amount}
@@ -166,6 +172,7 @@ export default function GrantPage() {
                     dateCreated={fDateTime(row.dateCreated)}
                     selected={selected.indexOf(row.name) !== -1}
                     handleClick={(event) => handleClick(event, row.name)}
+                    getGrants={getGrants}
                   />
                 ))}
 
@@ -190,6 +197,7 @@ export default function GrantPage() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
+      <ToastContainer autoClose={1000} />
     </Container>
   );
 }

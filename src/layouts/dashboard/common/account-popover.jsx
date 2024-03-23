@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -95,14 +96,16 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed', m: 0 }} />
 
-        <MenuItem
-          disableRipple
-          disableTouchRipple
-          onClick={handleClose}
-          sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
-        >
-          Logout
-        </MenuItem>
+        <Link to="/login">
+          <MenuItem
+            disableRipple
+            disableTouchRipple
+            onClick={handleClose}
+            sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
+          >
+            Logout
+          </MenuItem>
+        </Link>
       </Popover>
     </>
   );

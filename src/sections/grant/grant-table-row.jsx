@@ -11,33 +11,16 @@ import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import { Button } from '@mui/material';
+import { Delete, Edit } from '@mui/icons-material';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 // ----------------------------------------------------------------------
-
-const updateData = (formData) => {
-  console.log('submtting');
-  axios
-    .put('https://localhost:7197/api/grants', formData)
-    .then((response) => {
-      toast.success('Updated Successfully');
-      console.log('submitted successfully');
-    })
-    .catch((err) => toast.error(err.response.data));
-};
-
-const deleteData = (formData) => {
-  console.log('submtting');
-  axios
-    .delete('https://localhost:7197/api/grants', formData)
-    .then((response) => {
-      toast.success('Deleted Successfully');
-      console.log('submitted successfully');
-    })
-    .catch((err) => toast.error(err.response.data));
-};
 
 export default function GrantTableRow({
   selected,
@@ -48,6 +31,8 @@ export default function GrantTableRow({
   deadline,
   dateCreated,
   handleClick,
+  id,
+  getGrants,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -57,6 +42,20 @@ export default function GrantTableRow({
 
   const handleCloseMenu = () => {
     setOpen(null);
+  };
+
+  const deleteData = () => {
+    console.log(id);
+    axios
+      .delete(`https://localhost:7197/api/grants/${id}`)
+      .then((response) => {
+        getGrants();
+        toast.success('Deleted Successfully');
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data);
+      });
   };
 
   return (
@@ -102,17 +101,24 @@ export default function GrantTableRow({
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
-          <Link to="/editGrant">
-            <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-            Edit
-          </Link>
-        </MenuItem>
+        <div className="!flex !flex-col !gap-3">
+          <Button
+            variant="text"
+            onClick={() => {
+              setOpen(false);
+              navigate(`/editGrant/${id}`, { state: { id } });
+            }}
+            color="warning"
+            fullWidth
+          >
+            <Edit /> Edit
+          </Button>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
+          <Button variant="text" onClick={deleteData} color="error" fullWidth>
+            <Delete />
+            Delete
+          </Button>
+        </div>
       </Popover>
     </>
   );

@@ -1,7 +1,8 @@
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import AppTasks from '../app-tasks';
 import AppCurrentVisits from '../app-current-visits';
 import AppWidgetSummary from '../app-widget-summary';
@@ -10,6 +11,64 @@ import AppConversionRates from '../app-conversion-rates';
 // ----------------------------------------------------------------------
 
 export default function AppView() {
+  const [grants, setGrants] = useState([]);
+
+  const [applicants, setApplicants] = useState([]);
+
+  const [awardees, setAwardees] = useState([]);
+
+  async function getGrants() {
+    try {
+      const response = await axios.get('https://localhost:7197/api/Grants');
+      setGrants(response.data);
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data, { autoClose: 1000 });
+      }
+      console.log(err);
+    }
+  }
+
+  async function getAwardees() {
+    try {
+      const response = await axios.get('https://localhost:7197/api/Awardees');
+      setAwardees(response.data);
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data, { autoClose: 1000 });
+      }
+      console.log(err);
+    }
+  }
+
+  async function getApplicants() {
+    try {
+      const response = await axios.get('https://localhost:7197/api/Applicants');
+      setApplicants(response.data);
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data, { autoClose: 1000 });
+      }
+      console.log(err);
+    }
+  }
+
+  useEffect(async () => {
+    await getGrants();
+    await getApplicants();
+    await getAwardees();
+    console.log(grants);
+  }, []);
+  console.log(grants);
+
+  function calculateGrantTotal() {
+    let total = 0;
+    grants.forEach((grant) => {
+      total += grant.amount;
+    });
+    return total;
+  }
+
   return (
     <Container maxWidth="xl">
       <Typography variant="h4" sx={{ mb: 5 }}>
@@ -20,7 +79,7 @@ export default function AppView() {
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Total Grants"
-            total={714000}
+            total={grants.length}
             color="success"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_check.png" />}
           />
@@ -29,7 +88,7 @@ export default function AppView() {
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Total Amount for Grants"
-            total={1352831}
+            total={calculateGrantTotal()}
             color="info"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_check.png" />}
           />
@@ -38,7 +97,7 @@ export default function AppView() {
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Total Applicants"
-            total={1723315}
+            total={applicants.length}
             color="warning"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
           />
@@ -47,7 +106,7 @@ export default function AppView() {
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Total Awardees"
-            total={234}
+            total={awardees.length}
             color="error"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_medal.png" />}
           />

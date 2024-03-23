@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { inputFormElements } from './formElements';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function CreateGrantView() {
   const navigate = useNavigate();

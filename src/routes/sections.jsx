@@ -73,15 +73,15 @@ export default function Router() {
       element: <CreateUserPage />,
     },
     {
-      path: 'editApplicant',
+      path: 'editApplicant/:id',
       element: <EditApplicantPage />,
     },
     {
-      path: 'editAwardee',
+      path: 'editAwardee/:id',
       element: <EditAwardeePage />,
     },
     {
-      path: 'editGrant',
+      path: 'editGrant/:id',
       element: <EditGrantPage />,
     },
     {

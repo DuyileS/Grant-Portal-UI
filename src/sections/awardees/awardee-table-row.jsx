@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
-import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import { Delete, Download, Edit } from '@mui/icons-material';
+import { Button } from '@mui/material';
 
 import Iconify from 'src/components/iconify';
 
@@ -25,8 +26,37 @@ export default function AwardeeTableRow({
   areaOfSpecialization,
   amount,
   handleClick,
+  id,
+  getAwardees,
+  documentId,
 }) {
   const [open, setOpen] = useState(null);
+
+  const deleteData = () => {
+    console.log('submtting');
+    axios
+      .delete(`https://localhost:7197/api/awardees/${id}`)
+      .then((response) => {
+        getAwardees();
+        toast.success('Deleted Successfully');
+        console.log('submitted successfully');
+      })
+      .catch((err) => toast.error(err.response.data));
+  };
+
+  const viewDocument = () => {
+    console.log('submtting');
+    axios
+      .get(`https://localhost:7197/api/documents/${documentId}`)
+      .then((response) => {
+        getAwardees();
+        toast.success('Document downloaded Successfully');
+        console.log('submitted successfully');
+      })
+      .catch((err) => toast.error(err.response.data));
+  };
+
+  const navigate = useNavigate();
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -73,26 +103,30 @@ export default function AwardeeTableRow({
         onClose={handleCloseMenu}
         anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: { width: 140 },
-        }}
       >
-        <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:eye" sx={{ mr: 2 }} />
-          View Document
-        </MenuItem>
+        <div className="!flex !flex-col !gap-3">
+          <Button variant="text" onClick={handleCloseMenu} fullwidth>
+            <Download />
+            View Document
+          </Button>
 
-        <MenuItem onClick={handleCloseMenu}>
-          <Link to="editAwardee">
-            <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-            Edit
-          </Link>
-        </MenuItem>
+          <Button
+            variant="text"
+            onClick={() => {
+              setOpen(false);
+              navigate(`/editAwardee/${id}`, { state: { id } });
+            }}
+            color="warning"
+            fullWidth
+          >
+            <Edit /> Edit
+          </Button>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
+          <Button variant="text" onClick={deleteData} color="error" fullWidth>
+            <Delete />
+            Delete
+          </Button>
+        </div>
       </Popover>
     </>
   );

@@ -1,36 +1,45 @@
 import React from 'react';
+import { useState } from 'react';
 import './applicant.css';
-import { Grid, TextField, Button, Card, CardContent, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Grid, TextField, Card, CardContent, Typography } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { inputFormElements } from './formElements';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
 
 export function EditGrantView() {
   const margin = { margin: '0 5px' };
   const navigate = useNavigate();
 
-  const submitDocument = (formData) => {
-    console.log('submtting');
-    axios
-      .post('https://localhost:7197/api/documents', formData)
-      .then((response) => {
-        console.log('submitted successfully');
-      })
-      .catch((err) => toast.error(err.response.data));
-  };
+  const [loading, setLoading] = useState(false);
 
-  const submitData = (formData) => {
-    console.log('submtting');
+  const [formData, setFormData] = useState({
+    Title: '',
+    Description: '',
+    Criteria: '',
+    Amount: 0,
+    Department: '',
+    Deadline: '',
+  });
+  const { id } = useLocation().state;
+  console.log(id);
+
+  const submitForm = () => {
     axios
-      .post('https://localhost:7197/api/applicants', formData)
+      .put(`https://localhost:7197/api/grants/${id}`, formData)
       .then((response) => {
+        console.log(response);
+        setLoading(false);
         toast.success('Grant Edited Successfully');
-        navigate('/applicant');
+        navigate('/grant');
         console.log('submitted successfully');
       })
-      .catch((err) => toast.error(err.response.data));
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data);
+      });
   };
 
   return (
@@ -44,40 +53,112 @@ export function EditGrantView() {
             <Typography variant="subtitle1" color="textSecondary">
               Fill all the mandatory fields to edit a Grant.
             </Typography>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                const mainFormData = {};
-                for (let pair of formData.entries()) {
-                  mainFormData[pair[0]] = pair[1];
-                }
-                console.log(mainFormData);
-                submitData(mainFormData);
-              }}
-            >
+            <form>
               <Typography variant="body2" align="left" gutterBottom>
                 Grant Info :{' '}
               </Typography>
               <Grid container spacing={1}>
-                {inputFormElements.slice(0, 4).map((input) => (
-                  <Grid xs={input.xs} sm={input.sm} item>
-                    <TextField {...input} />
-                  </Grid>
-                ))}
-              </Grid>
-              <Grid container spacing={1}>
-                {inputFormElements.slice(4, 9).map((input) => (
-                  <Grid xs={input.xs} sm={input.sm} item>
-                    <TextField {...input} />
-                  </Grid>
-                ))}
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    name="title"
+                    placeholder="Enter Title"
+                    label="Title"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={formData.Title}
+                    onChange={(e) => {
+                      setFormData({ ...formData, Title: e.target.value });
+                    }}
+                  />
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    name="description"
+                    placeholder="Enter Description"
+                    label="Description"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={formData.Description}
+                    onChange={(e) => {
+                      setFormData({ ...formData, Description: e.target.value });
+                    }}
+                  />
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    name="criteria"
+                    placeholder="Enter Criteria"
+                    label="Criteria"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={formData.Criteria}
+                    onChange={(e) => {
+                      setFormData({ ...formData, Criteria: e.target.value });
+                    }}
+                  />
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    name="amount"
+                    placeholder="Enter Amount"
+                    label="Amount"
+                    type="number"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={formData.Amount}
+                    onChange={(e) => {
+                      setFormData({ ...formData, Amount: e.target.value });
+                    }}
+                  />
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    name="department"
+                    placeholder="Enter Department"
+                    label="Department"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={formData.Department}
+                    onChange={(e) => {
+                      setFormData({ ...formData, Department: e.target.value });
+                    }}
+                  />
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    name="deadline"
+                    placeholder="Enter Deadline"
+                    label="Deadline"
+                    type="date"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={formData.Deadline}
+                    onChange={(e) => {
+                      setFormData({ ...formData, Deadline: e.target.value });
+                    }}
+                  />
+                </Grid>
               </Grid>
               <Grid container spacing={1}>
                 <Grid item xs={12} align="right">
-                  <Button type="submit" variant="contained" color="inherit">
-                    Submit
-                  </Button>
+                  <LoadingButton
+                    type="submit"
+                    variant="contained"
+                    color="inherit"
+                    loading={loading}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      submitForm();
+                    }}
+                  >
+                    Update
+                  </LoadingButton>
                 </Grid>
               </Grid>
             </form>

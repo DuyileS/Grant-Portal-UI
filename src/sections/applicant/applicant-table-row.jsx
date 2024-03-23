@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
@@ -11,9 +11,13 @@ import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { Check, Close, Delete, Download, Edit } from '@mui/icons-material';
+import { Button } from '@mui/material';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // ----------------------------------------------------------------------
 
@@ -26,8 +30,53 @@ export default function ApplicantTableRow({
   phoneNumber,
   status,
   handleClick,
+  id,
+  getApplicants,
+  documentId,
 }) {
   const [open, setOpen] = useState(null);
+
+  const approveApplicant = () => {
+    console.log('submtting');
+    axios
+      .post('https://localhost:7197/api/awardees')
+      .then((response) => {
+        getApplicants();
+        setOpen(false);
+        toast.success('Applicant Approved');
+        console.log('submitted successfully');
+      })
+      .catch((err) => toast.error(err.response.data));
+  };
+
+  const deleteData = () => {
+    console.log('submtting');
+    setOpen(false);
+    axios
+      .delete(`https://localhost:7197/api/applicants/${id}`)
+      .then((response) => {
+        console.log(response);
+        getApplicants();
+        setOpen(false);
+
+        toast.success('Deleted Successfully');
+        console.log('submitted successfully');
+      })
+      .catch((err) => toast.error('An error occured'));
+  };
+
+  const viewDocument = () => {
+    console.log('submtting');
+    axios
+      .get(`https://localhost:7197/api/documents/${documentId}`)
+      .then((response) => {
+        getApplicants();
+        setOpen(false);
+        toast.success('Document downloaded Successfully');
+        console.log('submitted successfully');
+      })
+      .catch((err) => toast.error(err.response.data));
+  };
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -36,6 +85,8 @@ export default function ApplicantTableRow({
   const handleCloseMenu = () => {
     setOpen(null);
   };
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -77,41 +128,44 @@ export default function ApplicantTableRow({
         onClose={handleCloseMenu}
         anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: { width: 140 },
-        }}
       >
-        <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:eye" sx={{ mr: 2 }} />
-          Approve
-        </MenuItem>
+        <div className="!flex !flex-col !gap-3">
+          <Button variant="text" onClick={approveApplicant} color="success" fullwidth>
+            <Check />
+            Approve
+          </Button>
 
-        <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:eye" sx={{ mr: 2 }} />
-          Reject
-        </MenuItem>
+          <Button variant="text" onClick={deleteData} color="error" fullwidth>
+            <Close />
+            Reject
+          </Button>
 
-        <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:eye" sx={{ mr: 2 }} />
-          View Document
-        </MenuItem>
+          <Button variant="text" onClick={handleCloseMenu} fullwidth>
+            <Download />
+            View Document
+          </Button>
 
-        <MenuItem onClick={handleCloseMenu}>
-          <Link to="editApplicant">
-            <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-            Edit
-          </Link>
-        </MenuItem>
+          <Button
+            variant="text"
+            onClick={() => {
+              setOpen(false);
+              navigate(`/editApplicant/${id}`, { state: { id } });
+            }}
+            color="warning"
+            fullWidth
+          >
+            <Edit /> Edit
+          </Button>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
+          <Button variant="text" onClick={deleteData} color="error" fullWidth>
+            <Delete />
+            Delete
+          </Button>
+        </div>
       </Popover>
     </>
   );
 }
-
 ApplicantTableRow.propTypes = {
   department: PropTypes.any,
   handleClick: PropTypes.func,

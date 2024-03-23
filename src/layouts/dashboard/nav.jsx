@@ -61,13 +61,12 @@ export default function Nav({ openNav, onCloseNav }) {
   );
 
   const renderMenu = (
-    <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
+    <Stack component="nav" spacing={1.5} sx={{ px: 2 }}>
       {navConfig.map((item) => (
         <NavItem key={item.title} item={item} />
       ))}
     </Stack>
   );
-
 
   const renderContent = (
     <Scrollbar
@@ -80,14 +79,11 @@ export default function Nav({ openNav, onCloseNav }) {
         },
       }}
     >
-
       {renderAccount}
 
       {renderMenu}
 
       <Box sx={{ flexGrow: 1 }} />
-
-      
     </Scrollbar>
   );
 
