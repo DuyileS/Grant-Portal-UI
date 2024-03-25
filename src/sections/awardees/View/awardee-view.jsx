@@ -167,7 +167,7 @@ export default function AwardeePage() {
                   { id: '' },
                 ]}
               />
-              <TableBody>
+              <TableBody key={1}>
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (

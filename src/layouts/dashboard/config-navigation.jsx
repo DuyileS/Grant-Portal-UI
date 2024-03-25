@@ -32,11 +32,6 @@ const navConfig = [
     path: '/grant',
     icon: icon('ic_grant'),
   },
-  {
-    title: 'task',
-    path: '/task',
-    icon: icon('ic_tasks'),
-  },
 ];
 
 export default navConfig;

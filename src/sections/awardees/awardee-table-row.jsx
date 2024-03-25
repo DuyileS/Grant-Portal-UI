@@ -12,6 +12,9 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { Delete, Download, Edit } from '@mui/icons-material';
 import { Button } from '@mui/material';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Iconify from 'src/components/iconify';
 
@@ -49,9 +52,11 @@ export default function AwardeeTableRow({
     axios
       .get(`https://localhost:7197/api/documents/${documentId}`)
       .then((response) => {
-        getAwardees();
-        toast.success('Document downloaded Successfully');
+        const document = response.data.filePath;
+        setOpen(false);
         console.log('submitted successfully');
+        window.location.href = document;
+        toast.success('Document downloaded Successfully');
       })
       .catch((err) => toast.error(err.response.data));
   };
@@ -105,7 +110,7 @@ export default function AwardeeTableRow({
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <div className="!flex !flex-col !gap-3">
-          <Button variant="text" onClick={handleCloseMenu} fullwidth>
+          <Button variant="text" onClick={viewDocument} fullwidth>
             <Download />
             View Document
           </Button>
@@ -142,3 +147,19 @@ AwardeeTableRow.propTypes = {
   telephoneNumber: PropTypes.any,
   emailAddress: PropTypes.any,
 };
+
+/*
+
+chunk-X3B7SAOS.js?v=963c9e4e:16737 Uncaught TypeError: destroy is not a function
+    at safelyCallDestroy (chunk-X3B7SAOS.js?v=963c9e4e:16737:13)
+    at commitHookEffectListUnmount (chunk-X3B7SAOS.js?v=963c9e4e:16864:19)
+    at commitPassiveUnmountInsideDeletedTreeOnFiber (chunk-X3B7SAOS.js?v=963c9e4e:18279:17)
+    at commitPassiveUnmountEffectsInsideOfDeletedTree_begin (chunk-X3B7SAOS.js?v=963c9e4e:18241:13)
+    at commitPassiveUnmountEffects_begin (chunk-X3B7SAOS.js?v=963c9e4e:18177:19)
+    at commitPassiveUnmountEffects (chunk-X3B7SAOS.js?v=963c9e4e:18165:11)
+    at flushPassiveEffectsImpl (chunk-X3B7SAOS.js?v=963c9e4e:19485:11)
+    at flushPassiveEffects (chunk-X3B7SAOS.js?v=963c9e4e:19443:22)
+    at performSyncWorkOnRoot (chunk-X3B7SAOS.js?v=963c9e4e:18864:11)
+    at flushSyncCallbacks (chunk-X3B7SAOS.js?v=963c9e4e:9135:30)
+
+*/

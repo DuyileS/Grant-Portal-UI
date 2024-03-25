@@ -170,20 +170,6 @@ export function EditApplicantView() {
                 </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
-                    name="document"
-                    label="Document"
-                    type="file"
-                    variant="outlined"
-                    fullWidth
-                    required
-                    value={formData.Document}
-                    onChange={(e) => {
-                      setFormData({ ...formData, Document: e.target.value });
-                    }}
-                  />
-                </Grid>
-                <Grid xs={12} sm={6} item>
-                  <TextField
                     name="status"
                     placeholder="Enter Status"
                     label="Status"

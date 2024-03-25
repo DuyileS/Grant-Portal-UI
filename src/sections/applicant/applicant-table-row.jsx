@@ -70,10 +70,11 @@ export default function ApplicantTableRow({
     axios
       .get(`https://localhost:7197/api/documents/${documentId}`)
       .then((response) => {
-        getApplicants();
+        const document = response.data.filePath;
         setOpen(false);
-        toast.success('Document downloaded Successfully');
         console.log('submitted successfully');
+        window.location.href = document;
+        toast.success('Document downloaded Successfully');
       })
       .catch((err) => toast.error(err.response.data));
   };
@@ -112,7 +113,7 @@ export default function ApplicantTableRow({
         <TableCell align="center">{phoneNumber}</TableCell>
 
         <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>{status}</Label>
+          <Label color={(status === 'approved' && 'unapproved') || 'success'}>{status}</Label>
         </TableCell>
 
         <TableCell align="right">
@@ -140,7 +141,7 @@ export default function ApplicantTableRow({
             Reject
           </Button>
 
-          <Button variant="text" onClick={handleCloseMenu} fullwidth>
+          <Button variant="text" onClick={viewDocument} fullwidth>
             <Download />
             View Document
           </Button>

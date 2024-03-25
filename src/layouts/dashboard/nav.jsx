@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -14,19 +14,37 @@ import { RouterLink } from 'src/routes/components';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { account } from 'src/_mock/account';
-
 import Scrollbar from 'src/components/scrollbar';
 
 import { NAV } from './config-layout';
 import navConfig from './config-navigation';
+import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
+  const navigate = useNavigate();
+  const user = useLocation().state;
 
   const upLg = useResponsive('up', 'lg');
+  const [account, setAccount] = useState({
+    displayName: '',
+    role: '',
+    email: '',
+  });
+
+  useEffect(() => {
+    if (user) {
+      const { loggedInUser } = user;
+      setAccount({
+        displayName: loggedInUser.username.split('_').join(' ') || '',
+        role: loggedInUser.role || '',
+        email: loggedInUser.email || '',
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (openNav) {
@@ -48,7 +66,7 @@ export default function Nav({ openNav, onCloseNav }) {
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src={account.photoURL} alt="photoURL" />
+      <Avatar src="" alt="photoURL" />
 
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">{account.displayName}</Typography>

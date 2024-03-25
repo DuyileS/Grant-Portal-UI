@@ -32,17 +32,22 @@ export function CreateAwardeeView() {
     File: {},
   });
 
-  const submitDocument = () => {
+  const submitDocument = async () => {
     console.log('submtting file');
+    console.log(documentData);
     axios
       .post('https://localhost:7197/api/documents', documentData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       .then((response) => {
-        console.log('submitted successfully');
+        console.log(response);
         setFormData({ ...formData, DocumentId: response.data.documentId });
+        console.log('submitted successfully');
       })
-      .catch((err) => toast.error(err.response.data));
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data);
+      });
   };
 
   const submitForm = async () => {
@@ -182,9 +187,9 @@ export function CreateAwardeeView() {
                     variant="outlined"
                     fullWidth
                     required
-                    value={documentData.DocumentTitle}
+                    value={documentData.Title}
                     onChange={(e) => {
-                      setDocumentData({ ...documentData, DocumentTitle: e.target.value });
+                      setDocumentData({ ...documentData, Title: e.target.value });
                     }}
                   />
                 </Grid>

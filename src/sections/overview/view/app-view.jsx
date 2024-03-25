@@ -17,46 +17,52 @@ export default function AppView() {
 
   const [awardees, setAwardees] = useState([]);
 
-  async function getGrants() {
-    try {
-      const response = await axios.get('https://localhost:7197/api/Grants');
-      setGrants(response.data);
-    } catch (err) {
-      if (err.response) {
-        toast.error(err.response.data, { autoClose: 1000 });
-      }
-      console.log(err);
-    }
+  function getGrants() {
+    axios
+      .get('https://localhost:7197/api/Grants')
+      .then((response) => {
+        setGrants(response.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          toast.error(err.response.data, { autoClose: 1000 });
+        }
+        console.log(err);
+      });
   }
 
-  async function getAwardees() {
-    try {
-      const response = await axios.get('https://localhost:7197/api/Awardees');
-      setAwardees(response.data);
-    } catch (err) {
-      if (err.response) {
-        toast.error(err.response.data, { autoClose: 1000 });
-      }
-      console.log(err);
-    }
+  function getAwardees() {
+    axios
+      .get('https://localhost:7197/api/Awardees')
+      .then((response) => {
+        setAwardees(response.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          toast.error(err.response.data, { autoClose: 1000 });
+        }
+        console.log(err);
+      });
   }
 
-  async function getApplicants() {
-    try {
-      const response = await axios.get('https://localhost:7197/api/Applicants');
-      setApplicants(response.data);
-    } catch (err) {
-      if (err.response) {
-        toast.error(err.response.data, { autoClose: 1000 });
-      }
-      console.log(err);
-    }
+  function getApplicants() {
+    axios
+      .get('https://localhost:7197/api/Applicants')
+      .then((response) => {
+        setApplicants(response.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          toast.error(err.response.data, { autoClose: 1000 });
+        }
+        console.log(err);
+      });
   }
 
-  useEffect(async () => {
-    await getGrants();
-    await getApplicants();
-    await getAwardees();
+  useEffect(() => {
+    getGrants();
+    getApplicants();
+    getAwardees();
     console.log(grants);
   }, []);
   console.log(grants);

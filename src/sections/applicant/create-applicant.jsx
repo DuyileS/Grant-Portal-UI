@@ -123,7 +123,7 @@ export function CreateApplicantView() {
                 <Grid xs={12} sm={6} item>
                   <TextField
                     name="title"
-                    placeholder="Enter Title"
+                    placeholder="Enter Title for Grant"
                     label="Title"
                     variant="outlined"
                     fullWidth
