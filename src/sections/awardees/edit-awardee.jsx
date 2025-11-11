@@ -29,7 +29,7 @@ export function EditAwardeeView() {
   const submitDocument = (formData) => {
     console.log('submtting');
     axios
-      .post('https://localhost:7197/api/documents', formData)
+      .post('https://grant-portal-api.onrender.com/api/documents', formData)
       .then((response) => {
         console.log('submitted successfully');
       })
@@ -39,7 +39,7 @@ export function EditAwardeeView() {
   const submitForm = () => {
     console.log('submtting');
     axios
-      .put(`https://localhost:7197/api/awardees/${id}`, formData)
+      .put(`https://grant-portal-api.onrender.com/api/awardees/${id}`, formData)
       .then((response) => {
         setLoading(false);
         toast.success('Awardee Edited Successfully');

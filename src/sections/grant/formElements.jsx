@@ -20,7 +20,7 @@ export const inputFormElements=[
         variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
     },
     {
-        name:"deadline", type:"date", label: "Deadline",  
+        name:"deadline", type:"date",  
         variant:"outlined", fullWidth:true,required:true, xs:12,sm:6
     },
 ]

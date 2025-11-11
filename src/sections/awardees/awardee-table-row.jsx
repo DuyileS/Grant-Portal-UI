@@ -38,7 +38,7 @@ export default function AwardeeTableRow({
   const deleteData = () => {
     console.log('submtting');
     axios
-      .delete(`https://localhost:7197/api/awardees/${id}`)
+      .delete(`https://grant-portal-api.onrender.com/api/awardees/${id}`)
       .then((response) => {
         getAwardees();
         toast.success('Deleted Successfully');
@@ -50,7 +50,7 @@ export default function AwardeeTableRow({
   const viewDocument = () => {
     console.log('submtting');
     axios
-      .get(`https://localhost:7197/api/documents/${documentId}`)
+      .get(`https://grant-portal-api.onrender.com/api/documents/${documentId}`)
       .then((response) => {
         const document = response.data.filePath;
         setOpen(false);

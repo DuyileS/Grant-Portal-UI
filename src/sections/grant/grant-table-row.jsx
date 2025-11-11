@@ -47,7 +47,7 @@ export default function GrantTableRow({
   const deleteData = () => {
     console.log(id);
     axios
-      .delete(`https://localhost:7197/api/grants/${id}`)
+      .delete(`https://grant-portal-api.onrender.com/api/grants/${id}`)
       .then((response) => {
         getGrants();
         toast.success('Deleted Successfully');

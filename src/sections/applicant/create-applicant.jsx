@@ -37,7 +37,7 @@ export function CreateApplicantView() {
     console.log('submtting file');
     console.log(documentData);
     axios
-      .post('https://localhost:7197/api/documents', documentData, {
+      .post('https://grant-portal-api.onrender.com/api/documents', documentData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       .then((response) => {
@@ -57,7 +57,7 @@ export function CreateApplicantView() {
       .then(() => {
         console.log(formData);
         axios
-          .post('https://localhost:7197/api/applicants', formData)
+          .post('https://grant-portal-api.onrender.com/api/applicants', formData)
           .then((response) => {
             setLoading(false);
             toast.success('Applicant Created Successfully');
@@ -178,7 +178,7 @@ export function CreateApplicantView() {
                   />
                 </Grid>
               </Grid>
-              <Grid container spacing={1}>
+              <Grid container spacing={1} className='pt-2'>
                 <Grid xs={12} sm={6} item>
                   <TextField
                     name="title"
@@ -210,7 +210,6 @@ export function CreateApplicantView() {
                 <Grid xs={12} sm={6} item>
                   <TextField
                     name="document"
-                    label="Document"
                     type="file"
                     variant="outlined"
                     fullWidth

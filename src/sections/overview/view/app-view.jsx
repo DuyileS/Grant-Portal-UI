@@ -19,7 +19,7 @@ export default function AppView() {
 
   function getGrants() {
     axios
-      .get('https://localhost:7197/api/Grants')
+      .get('https://grant-portal-api.onrender.com/api/Grants')
       .then((response) => {
         setGrants(response.data);
       })
@@ -33,7 +33,7 @@ export default function AppView() {
 
   function getAwardees() {
     axios
-      .get('https://localhost:7197/api/Awardees')
+      .get('https://grant-portal-api.onrender.com/api/Awardees')
       .then((response) => {
         setAwardees(response.data);
       })
@@ -47,7 +47,7 @@ export default function AppView() {
 
   function getApplicants() {
     axios
-      .get('https://localhost:7197/api/Applicants')
+      .get('https://grant-portal-api.onrender.com/api/Applicants')
       .then((response) => {
         setApplicants(response.data);
       })

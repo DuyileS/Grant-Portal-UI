@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 export const availableGrants = () => {
   return axios
-    .get('https://localhost:7197/api/Grants')
+    .get('https://grant-portal-api.onrender.com/api/Grants')
     .then((response) => {
       return response.data;
     })

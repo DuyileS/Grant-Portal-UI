@@ -41,7 +41,7 @@ export default function SignupView() {
   const submitForm = () => {
     setLoading(true);
     axios
-      .post('https://localhost:7197/api/Auth/Register', formData)
+      .post('https://grant-portal-api.onrender.com/api/Auth/Register', formData)
       .then((response) => {
         console.log(response.data);
         setLoading(false);

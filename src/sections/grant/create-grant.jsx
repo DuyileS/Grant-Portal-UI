@@ -14,7 +14,7 @@ export function CreateGrantView() {
   const submitData = (formData) => {
     console.log('submtting');
     axios
-      .post('https://localhost:7197/api/grants', formData)
+      .post('https://grant-portal-api.onrender.com/api/grants', formData)
       .then((response) => {
         toast.success('Grant Created Successfully');
         navigate('/grant');
@@ -55,7 +55,7 @@ export function CreateGrantView() {
                   </Grid>
                 ))}
               </Grid>
-              <Grid container spacing={1}>
+              <Grid container spacing={1} className='py-2'>
                 {inputFormElements.slice(4, 9).map((input) => (
                   <Grid xs={input.xs} sm={input.sm} item>
                     <TextField {...input} />

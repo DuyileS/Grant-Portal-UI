@@ -50,7 +50,7 @@ export default function AwardeePage() {
 
   function getAwardees() {
     axios
-      .get('https://localhost:7197/api/Awardees')
+      .get('https://grant-portal-api.onrender.com/api/Awardees')
       .then((response) => {
         console.log(response.data);
         setApiData(response.data);
@@ -62,19 +62,6 @@ export default function AwardeePage() {
         console.log(err);
       });
   }
-
-  /*useEffect(() => {
-    axios
-      .get('https://localhost:7197/api/Awardees')
-      .then((response) => {
-        console.log(response.data);
-        setApiData(response.data);
-      })
-      .catch((err) => {
-        toast.error(err.response.data, { autoClose: 1000 });
-        console.log(err.response.data);
-      });
-  }, []); */
 
   useEffect(() => {
     getAwardees();

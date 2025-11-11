@@ -54,7 +54,7 @@ export default function GrantPage() {
 
   function getGrants() {
     axios
-      .get('https://localhost:7197/api/Grants')
+      .get('https://grant-portal-api.onrender.com/api/Grants')
       .then((response) => {
         console.log(response.data);
         setApiData(response.data);

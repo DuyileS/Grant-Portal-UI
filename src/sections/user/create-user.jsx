@@ -13,7 +13,7 @@ export function CreateUserView() {
   const submitData = (formData) => {
     console.log('submtting');
     axios
-      .post('https://localhost:7197/api/Auth/Register', formData)
+      .post('https://grant-portal-api.onrender.com/api/Auth/Register', formData)
       .then((response) => {
         toast.success('User Created Successfully');
         navigate('/user');

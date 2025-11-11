@@ -38,7 +38,7 @@ export default function LoginView() {
   const submitForm = () => {
     setLoading(true);
     axios
-      .post('https://localhost:7197/api/Auth/Login', formData)
+      .post('https://grant-portal-api.onrender.com/api/Auth/Login', formData)
       .then((response) => {
         console.log(response.data);
         localStorage.setItem('jwtToken', `Bearer ${response.data.jwtToken}`);

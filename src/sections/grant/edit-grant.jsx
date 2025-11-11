@@ -28,7 +28,7 @@ export function EditGrantView() {
 
   const submitForm = () => {
     axios
-      .put(`https://localhost:7197/api/grants/${id}`, formData)
+      .put(`https://grant-portal-api.onrender.com/api/grants/${id}`, formData)
       .then((response) => {
         console.log(response);
         setLoading(false);

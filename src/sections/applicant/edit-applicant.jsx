@@ -36,7 +36,7 @@ export function EditApplicantView() {
   console.log(id);
   useEffect(() => {
     axios
-      .get(`https://localhost:7197/api/applicants/${id}`)
+      .get(`https://grant-portal-api.onrender.com/api/applicants/${id}`)
       .then((response) => {
         setLoading(false);
         setFormData(response.data);
@@ -47,7 +47,7 @@ export function EditApplicantView() {
   const submitDocument = (documentData) => {
     console.log('submtting');
     axios
-      .post('https://localhost:7197/api/documents', documentData)
+      .post('https://grant-portal-api.onrender.com/api/documents', documentData)
       .then((response) => {
         console.log('submitted successfully');
       })
@@ -57,7 +57,7 @@ export function EditApplicantView() {
   const submitForm = () => {
     console.log('submtting');
     axios
-      .put(`https://localhost:7197/api/applicants/${id}`, formData)
+      .put(`https://grant-portal-api.onrender.com/api/applicants/${id}`, formData)
       .then((response) => {
         setLoading(false);
         toast.success('Applicant Edited Successfully');
