@@ -30,18 +30,64 @@ export default function AccountPopover() {
     displayName: '',
     role: '',
     email: '',
+    avatarUrl: '',
   });
 
   useEffect(() => {
-    if (user) {
-      const { loggedInUser } = user;
+    let loggedInUser = null;
+
+    if (user && user.loggedInUser) {
+      loggedInUser = user.loggedInUser;
+    } else {
+      const storedUser = localStorage.getItem('loggedInUser');
+      if (storedUser) {
+        try {
+          loggedInUser = JSON.parse(storedUser);
+        } catch (e) {
+          console.error('Failed to parse loggedInUser from localStorage');
+        }
+      }
+    }
+
+    if (!loggedInUser) {
+      const token = localStorage.getItem('jwtToken');
+      if (token) {
+        const actualToken = token.startsWith('Bearer ') ? token.slice(7) : token;
+        try {
+          const decoded = JSON.parse(atob(actualToken.split('.')[1]));
+          loggedInUser = {
+            username: decoded.unique_name || decoded.name || decoded.sub || decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || 'User',
+            role: decoded.role || decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || '',
+            email: decoded.email || decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || '',
+            gender: decoded.gender || 'male'
+          };
+          localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+        } catch (e) {
+          console.error('Failed to parse jwtToken for user fallback');
+        }
+      }
+    }
+
+    if (loggedInUser) {
+      const genderStr = (loggedInUser.gender || 'male').toLowerCase();
+      const genderPath = genderStr === 'female' ? 'women' : 'men';
+
+      // We can optionally store the generated avatar in localStorage so it doesn't change on every refresh
+      let currentAvatar = localStorage.getItem('userAvatarUrl');
+      if (!currentAvatar) {
+        const randomId = Math.floor(Math.random() * 99) + 1;
+        currentAvatar = `https://randomuser.me/api/portraits/${genderPath}/${randomId}.jpg`;
+        localStorage.setItem('userAvatarUrl', currentAvatar);
+      }
+
       setAccount({
-        displayName: loggedInUser.username.split('_').join(' ') || '',
+        displayName: loggedInUser.username?.split('_').join(' ') || '',
         role: loggedInUser.role || '',
         email: loggedInUser.email || '',
+        avatarUrl: currentAvatar,
       });
     }
-  }, []);
+  }, [user]);
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -49,6 +95,14 @@ export default function AccountPopover() {
 
   const handleClose = () => {
     setOpen(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('userAvatarUrl');
+    setOpen(null);
+    navigate('/login', { replace: true });
   };
 
   return (
@@ -66,7 +120,7 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={''}
+          src={account.avatarUrl}
           alt={account.displayName}
           sx={{
             width: 36,
@@ -112,16 +166,14 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed', m: 0 }} />
 
-        <Link to="/login">
-          <MenuItem
-            disableRipple
-            disableTouchRipple
-            onClick={handleClose}
-            sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
-          >
-            Logout
-          </MenuItem>
-        </Link>
+        <MenuItem
+          disableRipple
+          disableTouchRipple
+          onClick={handleLogout}
+          sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
+        >
+          Logout
+        </MenuItem>
       </Popover>
     </>
   );

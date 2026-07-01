@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './applicant.css';
-import { useState } from 'react';
 import { Grid, TextField, Button, Card, CardContent, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -25,6 +24,23 @@ export function EditAwardeeView() {
   });
 
   const { id } = useLocation().state;
+
+  useEffect(() => {
+    axios
+      .get(`https://grant-portal-api.onrender.com/api/awardees/${id}`)
+      .then((response) => {
+        const data = response.data;
+        setFormData({
+          Firstname: data.firstName || '',
+          Lastname: data.lastName || '',
+          PhoneNumber: data.phoneNumber || '',
+          Email: data.email || '',
+          AreaOfSpecialization: data.areaOfSpecialization || '',
+          Amount: data.amount || '',
+        });
+      })
+      .catch((err) => toast.error('Failed to load awardee data'));
+  }, [id]);
 
   const submitDocument = (formData) => {
     console.log('submtting');

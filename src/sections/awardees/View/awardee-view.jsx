@@ -67,9 +67,24 @@ export default function AwardeePage() {
     getAwardees();
   }, []);
 
+  const handleDeleteSelected = () => {
+    Promise.all(
+      selected.map((id) => axios.delete(`https://grant-portal-api.onrender.com/api/awardees/${id}`))
+    )
+      .then(() => {
+        toast.success('Deleted successfully');
+        setSelected([]);
+        getAwardees();
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error('Failed to delete some items');
+      });
+  };
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = apidata.map((n) => n.name);
+      const newSelecteds = apidata.map((n) => n.awardeeId);
       setSelected(newSelecteds);
       return;
     }
@@ -133,6 +148,7 @@ export default function AwardeePage() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          onDelete={handleDeleteSelected}
         />
 
         <Scrollbar>
@@ -168,8 +184,8 @@ export default function AwardeePage() {
                       emailAddress={row.email}
                       amount={row.amount}
                       areaOfSpecialization={row.areaOfSpecialization}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
+                      selected={selected.indexOf(row.awardeeId) !== -1}
+                      handleClick={(event) => handleClick(event, row.awardeeId)}
                     />
                   ))}
 

@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './applicant.css';
 import { Grid, TextField, Card, CardContent, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -25,6 +24,23 @@ export function EditGrantView() {
   });
   const { id } = useLocation().state;
   console.log(id);
+
+  useEffect(() => {
+    axios
+      .get(`https://grant-portal-api.onrender.com/api/grants/${id}`)
+      .then((response) => {
+        const data = response.data;
+        setFormData({
+          Title: data.title || '',
+          Description: data.description || '',
+          Criteria: data.criteria || '',
+          Amount: data.amount || 0,
+          Department: data.department || '',
+          Deadline: data.deadline ? data.deadline.slice(0, 10) : '',
+        });
+      })
+      .catch((err) => toast.error('Failed to load grant data'));
+  }, [id]);
 
   const submitForm = () => {
     axios

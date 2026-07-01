@@ -1,7 +1,39 @@
 import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import DashboardLayout from 'src/layouts/dashboard';
+
+const parseJwt = (token) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+};
+
+const isTokenValid = (token) => {
+  if (!token) return false;
+  const actualToken = token.startsWith('Bearer ') ? token.slice(7) : token;
+  const decoded = parseJwt(actualToken);
+  if (!decoded || !decoded.exp) return false;
+  return decoded.exp * 1000 > Date.now();
+};
+
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem('jwtToken');
+  if (!isTokenValid(token)) {
+    // If not authenticated or token expired, redirect to login page
+    // also clear token just in case
+    if (token) localStorage.removeItem('jwtToken');
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+ProtectedRoute.propTypes = {
+  children: PropTypes.node,
+};
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
@@ -28,11 +60,13 @@ export default function Router() {
   const routes = useRoutes([
     {
       element: (
-        <DashboardLayout>
-          <Suspense>
-            <Outlet />
-          </Suspense>
-        </DashboardLayout>
+        <ProtectedRoute>
+          <DashboardLayout>
+            <Suspense>
+              <Outlet />
+            </Suspense>
+          </DashboardLayout>
+        </ProtectedRoute>
       ),
       children: [
         { element: <IndexPage />, index: true },
@@ -53,36 +87,21 @@ export default function Router() {
       element: <SignupPage />,
     },
     {
-      path: 'profile',
-      element: <ProfilePage />,
-    },
-    {
-      path: 'createApplicant',
-      element: <CreateApplicantPage />,
-    },
-    {
-      path: 'createAwardee',
-      element: <CreateAwardeePage />,
-    },
-    {
-      path: 'createGrant',
-      element: <CreateGrantPage />,
-    },
-    {
-      path: 'createUser',
-      element: <CreateUserPage />,
-    },
-    {
-      path: 'editApplicant/:id',
-      element: <EditApplicantPage />,
-    },
-    {
-      path: 'editAwardee/:id',
-      element: <EditAwardeePage />,
-    },
-    {
-      path: 'editGrant/:id',
-      element: <EditGrantPage />,
+      element: (
+        <ProtectedRoute>
+          <Outlet />
+        </ProtectedRoute>
+      ),
+      children: [
+        { path: 'profile', element: <ProfilePage /> },
+        { path: 'createApplicant', element: <CreateApplicantPage /> },
+        { path: 'createAwardee', element: <CreateAwardeePage /> },
+        { path: 'createGrant', element: <CreateGrantPage /> },
+        { path: 'createUser', element: <CreateUserPage /> },
+        { path: 'editApplicant/:id', element: <EditApplicantPage /> },
+        { path: 'editAwardee/:id', element: <EditAwardeePage /> },
+        { path: 'editGrant/:id', element: <EditGrantPage /> },
+      ],
     },
     {
       path: '404',

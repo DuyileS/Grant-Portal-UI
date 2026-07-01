@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 import Stack from '@mui/material/Stack';
@@ -35,6 +35,7 @@ export default function GrantTableRow({
   getGrants,
 }) {
   const [open, setOpen] = useState(null);
+  const navigate = useNavigate();
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);

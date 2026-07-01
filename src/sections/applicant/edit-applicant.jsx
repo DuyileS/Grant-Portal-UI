@@ -39,10 +39,20 @@ export function EditApplicantView() {
       .get(`https://grant-portal-api.onrender.com/api/applicants/${id}`)
       .then((response) => {
         setLoading(false);
-        setFormData(response.data);
+        const data = response.data;
+        setFormData({
+          Firstname: data.firstName || '',
+          Lastname: data.lastName || '',
+          Title: data.title || '',
+          Email: data.email || '',
+          PhoneNumber: data.phoneNumber || '',
+          Department: data.department || '',
+          isStaffMember: data.isStaffMember ?? true,
+          Status: data.status || '',
+        });
       })
-      .catch((err) => toast.error(err.response.data));
-  }, []);
+      .catch((err) => toast.error('Failed to load applicant data'));
+  }, [id]);
 
   const submitDocument = (documentData) => {
     console.log('submtting');

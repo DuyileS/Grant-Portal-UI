@@ -42,6 +42,7 @@ export default function LoginView() {
       .then((response) => {
         console.log(response.data);
         localStorage.setItem('jwtToken', `Bearer ${response.data.jwtToken}`);
+        localStorage.setItem('loggedInUser', JSON.stringify(response.data));
         setLoading(false);
         toast.success('login Successful', { autoClose: 1000 });
         navigate('/', { state: { loggedInUser: response.data } });

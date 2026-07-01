@@ -81,9 +81,24 @@ export default function ApplicantPage() {
     getApplicants();
   }, []);
 
+  const handleDeleteSelected = () => {
+    Promise.all(
+      selected.map((id) => axios.delete(`https://grant-portal-api.onrender.com/api/applicants/${id}`))
+    )
+      .then(() => {
+        toast.success('Deleted successfully');
+        setSelected([]);
+        getApplicants();
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error('Failed to delete some items');
+      });
+  };
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = apidata.map((n) => n.name);
+      const newSelecteds = apidata.map((n) => n.applicantId);
       setSelected(newSelecteds);
       return;
     }
@@ -147,6 +162,7 @@ export default function ApplicantPage() {
           numSelected={selected.length}
           filterName={apidata.firstName}
           onFilterName={handleFilterByName}
+          onDelete={handleDeleteSelected}
         />
 
         <Scrollbar>
@@ -184,8 +200,8 @@ export default function ApplicantPage() {
                       email={row.email}
                       phoneNumber={row.phoneNumber}
                       status={row.status}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
+                      selected={selected.indexOf(row.applicantId) !== -1}
+                      handleClick={(event) => handleClick(event, row.applicantId)}
                     />
                   ))}
 

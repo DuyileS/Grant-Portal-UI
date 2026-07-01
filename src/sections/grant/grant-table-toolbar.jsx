@@ -11,7 +11,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function GrantTableToolbar({ numSelected, filterName, onFilterName }) {
+export default function GrantTableToolbar({ numSelected, filterName, onFilterName, onDelete }) {
   return (
     <Toolbar
       sx={{
@@ -47,7 +47,7 @@ export default function GrantTableToolbar({ numSelected, filterName, onFilterNam
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={onDelete}>
             <Iconify icon="eva:trash-2-fill" />
           </IconButton>
         </Tooltip>
@@ -66,4 +66,5 @@ GrantTableToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  onDelete: PropTypes.func,
 };
